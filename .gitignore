@@ -1,0 +1,11 @@
+.DS_Store
+*.pyc
+
+logs/
+src/
+
+TODO
+
+celeryconfig-example.py
+core/config.py
+example_sms.json

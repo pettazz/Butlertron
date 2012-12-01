@@ -1,0 +1,5 @@
+MySQL_python
+requests
+twisted
+twilio
+celery
