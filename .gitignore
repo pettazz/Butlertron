@@ -6,6 +6,6 @@ src/
 
 TODO
 
-celeryconfig-example.py
+celeryconfig.py
 core/config.py
 example_sms.json
