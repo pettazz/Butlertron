@@ -1,5 +1,6 @@
 MySQL_python
 requests
-twisted
+tornado
 twilio
 celery
+fluent-logger
