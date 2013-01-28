@@ -4,19 +4,23 @@ import tornado.escape
 import tornado.ioloop
 import tornado.options
 import tornado.web
-import os.path
+import os, os.path
 import uuid
+import importlib
 
 from tornado.options import define, options
+
+import locale
+from core.strings import STRINGS
+STRINGS = STRINGS[locale.getdefaultlocale()[0]]
 
 define("port", default=8888, help="run on the given port", type=int)
 
 
-class Application(tornado.web.Application):
+class ButlertronAPI(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r"/", MainHandler),
-            (r"/event", EventHandler),
+            #(r"/", MainHandler),
             # (r"/auth/login", AuthLoginHandler),
             # (r"/auth/logout", AuthLogoutHandler),
         ]
@@ -31,27 +35,30 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 
-class BaseHandler(tornado.web.RequestHandler):
+
+
+class UnrecognizedEventError(Exception):
     pass
 
 
-class MainHandler(BaseHandler):
-    # / will be the webapp i think, so these are pointless here
-    def get(self):
-        self.write({'what': 'idunno'})
-
-    def post(self):
-        self.write({'what': 'idunno'})
-
-class EventHandler(BaseHandler):
-    def post(self):
-        workflow_id = self.get_argument("workflow_id")
-
+def update_handlers():
+    for handler_file in os.listdir('event_handlers'):
+        if handler_file.endswith('_handler.py'):
+            handler_module = handler_file.split('.py', 1)[0]
+            handler_short_name = handler_file.split('_handler.py', 1)[0]
+            handler_class_name = "%sEventHandler" % handler_short_name.capitalize()
+            # try:
+            exec('from event_handlers.%s import %s' % (handler_module, handler_class_name))
+            # importlib.import_module(handler_class_name, 'event_handlers.' + handler_module)
+            # except:
+            #     print "cant load " + handler_class_name
 
 
 def main():
     tornado.options.parse_command_line()
-    app = Application()
+    app = ButlertronAPI()
+    update_handlers()
+    
     app.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
 
