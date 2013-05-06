@@ -1,6 +1,4 @@
-MySQL_python
 requests
 tornado
 twilio
 celery
-fluent-logger
