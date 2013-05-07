@@ -33,14 +33,14 @@ class DatabaseManager():
         if retry_count == 3:
             raise Exception("Unable to connect to MySQL Database after three retries.")
 
-    def fetchall_query_and_close(self,query,values):
+    def fetchall_query_and_close(self, query, values):
         """Executes a query, gets all the values and then closes up the connection"""
         self.cursor.execute(query, self.__sanitize(values))
         retval = self.cursor.fetchall()
         self.__close_db()
         return retval
 
-    def fetchone_query_and_close(self,query,values):
+    def fetchone_query_and_close(self, query, values):
         """Executes a query, gets the first value and then closes up the connection"""
         self.cursor.execute(query, self.__sanitize(values))
         retval = self.cursor.fetchone()
