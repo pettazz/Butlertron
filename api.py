@@ -23,7 +23,7 @@ class ButlertronAPI(tornado.web.Application):
         # tornado app settings
         settings = dict(
             debug = True,
-            # cookie_secret="131afe2b2ce8ea020b79c75e52a3d2aa",
+            cookie_secret = config.BUTL.API['cookie_secret'],
             # login_url="/auth/login",
             # template_path=os.path.join(os.path.dirname(__file__), "templates"),
             # static_path=os.path.join(os.path.dirname(__file__), "static"),
