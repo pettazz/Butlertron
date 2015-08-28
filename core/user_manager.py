@@ -1,33 +1,15 @@
-import getpass
-
 from mysql import DatabaseManager
-
 
 class UserManager:
 
+    def 
 
-    def get_user_id(self):
-        user_name = getpass.getuser()
+    def get_user_by_id(self, id):
         query = """
-            SELECT id FROM User WHERE
-            username = %(user_name)s
+            SELECT id, username, email, phone FROM User WHERE
+            id = %(id)s
         """
-        result = DatabaseManager().fetchone_query_and_close(query, {'user_name': user_name})
-        if result is not None:
-            user_id = result[0]
-        else:
-            user_name = raw_input("TvRobot Username: ")
-            query = """
-                SELECT id FROM User WHERE
-                username = %(user_name)s
-            """
-            result = DatabaseManager().fetchone_query_and_close(query, {'user_name': user_name})
-            if result is not None:
-                user_id = result[0]
-            else:
-                raise Exception("User does not exist.")
-
-        return user_id
+        return DatabaseManager().fetchone_query_and_close(query, {'id': id})
 
     def get_user_phone_by_id(self, id):
         query = """
@@ -43,6 +25,7 @@ class UserManager:
     def get_user_id_by_phone(self, phone):
         if phone.startswith('+1'):
             phone = phone[2:]
+        phone = phone.replace('-', '').replace(' ', '')
         query = """
             SELECT id FROM User WHERE
             phone = %(phone)s
